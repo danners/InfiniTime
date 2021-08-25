@@ -12,8 +12,12 @@ Notifications::Notifications(DisplayApp* app,
                              Pinetime::Controllers::NotificationManager& notificationManager,
                              Pinetime::Controllers::AlertNotificationService& alertNotificationService,
                              Pinetime::Controllers::MotorController& motorController,
+                             Pinetime::Controllers::Settings& settingsController,
                              Modes mode)
-  : Screen(app), notificationManager {notificationManager}, alertNotificationService {alertNotificationService}, mode {mode} {
+  : Screen(app), notificationManager {notificationManager},
+  alertNotificationService {alertNotificationService},
+  settingsController { settingsController},
+   mode {mode} {
   notificationManager.ClearNewNotificationFlag();
   auto notification = notificationManager.GetLastNotification();
   if (notification.valid) {
@@ -49,7 +53,8 @@ Notifications::Notifications(DisplayApp* app,
 
       lv_line_set_points(timeoutLine, timeoutLinePoints, 2);
       timeoutTickCountStart = xTaskGetTickCount();
-      timeoutTickCountEnd = timeoutTickCountStart + (5 * 1024);
+      uint8_t duration = settingsController.GetNotificationDuration();
+      timeoutTickCountEnd = timeoutTickCountStart + (duration * 1024);
     }
   }
 }

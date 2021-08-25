@@ -124,6 +124,17 @@ namespace Pinetime {
       
       uint32_t GetStepsGoal() const { return settings.stepsGoal; };
 
+      void SetNotificationDuration(uint8_t durationInSec) {
+        if (durationInSec != settings.notificationDurationInSec) {
+          settingsChanged = true;
+        }
+        settings.notificationDurationInSec = durationInSec;
+      }
+
+      uint8_t GetNotificationDuration() {
+        return settings.notificationDurationInSec;
+      }
+
     private:
       Pinetime::Controllers::FS& fs;
 
@@ -142,6 +153,8 @@ namespace Pinetime {
         std::bitset<3> wakeUpMode {0};
 
         Controllers::BrightnessController::Levels brightLevel = Controllers::BrightnessController::Levels::Medium;
+
+        uint8_t notificationDurationInSec = 5;
       };
 
       SettingsData settings;
